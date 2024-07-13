@@ -1,0 +1,13 @@
+ dependencies
+/node_modules
+/.pnp
+.pnp.js
+.teste.js
+/.vscode
+.db_sync.js
+/.teste.js
+/.dados.json
+/.gerarTokens.js
+/.links.js
+/.consultas.json
+/.links.js
