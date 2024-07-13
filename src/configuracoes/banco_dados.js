@@ -21,7 +21,8 @@ const sequelize = new Sequelize(
     process.env[dados_bancos[obj].pass], {
         dialect: dados_bancos[obj].dialect,
         logging: dados_bancos[obj].logging,
-        host: process.env[dados_bancos[obj].host]
+        host: process.env[dados_bancos[obj].host],
+        dialectModule: require("mysql2")
     }
 )
 
