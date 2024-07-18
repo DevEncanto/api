@@ -9,8 +9,6 @@ const cadastroUsuario = async (req, res) => {
 
     ({ error, data } = await VerificarEmail(email))
 
-    console.log(error)
-
     if (error) { return res.json({ status: 404 }) }
     if (data) {
         return res.json({
@@ -21,12 +19,10 @@ const cadastroUsuario = async (req, res) => {
 
     ({ error, data } = await VerificarUsuario(usuario))
 
-    console.log(error)
-
     if (error) { return res.json({ status: 404 }) }
     if (data) {
         return res.json({
-            status: 504,
+            status: 505,
             message: "Usuário já está em uso!"
         })
     }
@@ -38,10 +34,7 @@ const cadastroUsuario = async (req, res) => {
         ({ error, data } = await VerificarCodigo(codigoIndicacao))
     }
 
-
     ({ error, data } = await CadastroUsuario(usuario, email, senha, codigoIndicacao))
-
-    console.log(error)
 
     if (error) { return res.json({ status: 404 }) }
     if (data) {
@@ -51,7 +44,7 @@ const cadastroUsuario = async (req, res) => {
         })
     } else {
         return res.json({
-            status: 504,
+            status: 506,
             message: "Falha ao cadastrar o usuário!"
         })
     }
