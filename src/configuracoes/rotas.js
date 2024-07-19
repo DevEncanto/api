@@ -1,6 +1,6 @@
 const rotas = [
     require("../rotas/Health"),
-    require("../rotas/Cadastro"),
+    require("../rotas/Autenticacao"),
     require("../rotas/Login")
 ]
 

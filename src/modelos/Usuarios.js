@@ -32,17 +32,9 @@ const Usuario = database.define('usuarios', {
         type: Sequelize.DOUBLE,
         defaultValue: 0
     },
-    saldoPendente: {
-        type: Sequelize.DOUBLE,
-        defaultValue: 0
-    },
-    lucroTotal: {
-        type: Sequelize.DOUBLE,
-        defaultValue: 0
-    },
     statusConta: {
         type: Sequelize.STRING,
-        defaultValue: "ATIVA"
+        defaultValue: "VALIDAÇÃO"
     },
     totalDesafios: {
         type: Sequelize.INTEGER,

@@ -12,6 +12,15 @@ const geradorCodigo = async (tamanho = 8) => {
     return stringAleatoria;
 }
 
+const geradorCodigoNumerico = async () => {
+    let stringAleatoria = '';
+    let caracteres = '0123456789';
+    for (var i = 0; i < 6; i++) {
+        stringAleatoria += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+    return stringAleatoria;
+}
+
 //Exportação
 
-module.exports = geradorCodigo
+module.exports = { geradorCodigo, geradorCodigoNumerico }

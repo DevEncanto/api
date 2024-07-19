@@ -10,8 +10,6 @@ const loginUsuario = async (req, res) => {
 
     ({ error, data } = await BuscarUsuario(acesso))
 
-    console.log(error,data)
-
 
     if (error) { return res.json({ status: 404 }) }
     if (!data) {

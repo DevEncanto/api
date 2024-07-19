@@ -93,7 +93,6 @@ const CadastroUsuario = async (usuario, email, senha, codigo) => {
             senha: await hash(senha),
             email: email,
             avatar: "/pessoa1.png",
-            statusConta: "ATIVA",
             codigoIndicacao: codigo
         })
     })
@@ -127,5 +126,35 @@ const VerificarCodigo = async (codigo) => {
     })
 }
 
+const AtualizarStatusConta = async (idUsuario, status) => {
+    return TryCatch(async () => {
+        await Usuarios.update({ statusConta: status }, {
+            where: {
+                idUsuario: idUsuario,
+            },
+        });
+    })
+}
 
-module.exports = { CadastroUsuario, VerificarEmail, VerificarUsuario, VerificarCodigo }
+
+const VerificadorCodigoNumerico = async (codigo = 0, codigosCadastro = []) => {
+    let result = false
+
+    codigosCadastro.forEach((item) => {
+        if (item.codigo == codigo) {
+            result = true
+            return
+        }
+    })
+
+    return result
+}
+
+module.exports = {
+    CadastroUsuario,
+    VerificarEmail,
+    VerificarUsuario,
+    VerificarCodigo,
+    VerificadorCodigoNumerico,
+    AtualizarStatusConta
+}
