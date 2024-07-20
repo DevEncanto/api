@@ -2,10 +2,10 @@
 const Sequelize = require("sequelize")
 
 //Importação da Conexão com o Banco de Dados
-const database = require("../configuracoes/banco_dados")
+const database = require("../../configuracoes/banco_dados")
 
-const Rifas = require("../modelos/Rifas")
-const Usuarios = require("../modelos/Usuarios")
+const Rifas = require("./Rifas")
+const Usuarios = require("./Usuarios")
 
 //Importação da Model Usuários
 const Bilhetes = database.define('bilhetes', {

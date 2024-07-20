@@ -3,7 +3,7 @@ const { Op } = require('sequelize')
 const database = require("../configuracoes/banco_dados")
 
 //Importação da model Usuários
-const Usuarios = require("../modelos/Usuarios")
+const Usuarios = require("../modelos/mysql/Usuarios")
 const TryCatch = require('../utilidades/try')
 
 //Objeto de consultas

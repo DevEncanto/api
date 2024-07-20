@@ -2,7 +2,7 @@
 const Sequelize = require("sequelize")
 
 //Importação da Conexão com o Banco de Dados
-const database = require("../configuracoes/banco_dados")
+const database = require("../../configuracoes/banco_dados")
 
 //Definição do Model Usuários
 

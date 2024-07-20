@@ -3,7 +3,7 @@
 const database = require("../configuracoes/banco_dados")
 
 //Importação da model Usuários
-const Usuarios = require("../modelos/Usuarios")
+const Usuarios = require("../modelos/mysql/Usuarios")
 
 //Importação da função que gera hash da senha.
 

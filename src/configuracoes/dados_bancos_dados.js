@@ -7,13 +7,18 @@ const banco_de_dados = {
         user: "NODE_USER_LOCAL",
         logging: false
     },
-    producao:  {
+    producao: {
         db: "NODE_DB_HOSTINGER",
         host: "NODE_HOST_HOSTINGER",
         dialect: "mysql",
         pass: "NODE_PASS_HOSTINGER",
         user: "NODE_USER_HOSTINGER",
         logging: false
+    },
+    mongo: {
+        user: "NODE_USER_MONGO",
+        pass: "NODE_PASS_MONGO",
+        db: "NODE_DB_MONGO"
     }
 }
 

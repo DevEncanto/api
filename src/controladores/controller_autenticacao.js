@@ -4,6 +4,7 @@ const enviarEmail = require("../utilidades/enviar_email")
 const { BuscarUsuario } = require("../consultas/QueryLogin")
 const { compare } = require("../utilidades/criptografia")
 const { gerarToken } = require("../utilidades/jwt")
+const backupServidor = require("../utilidades/backup")
 
 const cadastroUsuario = async (req, res) => {
 
@@ -48,7 +49,7 @@ const cadastroUsuario = async (req, res) => {
 
     if (error) { return res.json({ status: 403, message: "Falha ao cadastrar o usuário!" }) }
 
-    req.app.locals.codigosCadastro.push({
+    req.app.locals.codigosValidacao.push({
         idUsuario: data.idUsuario,
         codigo: codigoValidacao
     })
@@ -57,6 +58,7 @@ const cadastroUsuario = async (req, res) => {
         codigo: codigoValidacao
     })
     if (data) {
+        await backupServidor(req.app)
         return res.json({
             status: 200,
             message: "Usuário cadastrado com sucesso!"
@@ -72,7 +74,7 @@ const cadastroUsuario = async (req, res) => {
 const validarCodigoVerificacao = async (req, res) => {
     const codigo = req.body.codigo
     let result = false, indexCodigo, error, data, idUsuario
-    let codigos = req.app.locals.codigosCadastro
+    let codigos = req.app.locals.codigosValidacao
 
     codigos.forEach((item, index) => {
         if (item.codigo == codigo) {
@@ -84,7 +86,7 @@ const validarCodigoVerificacao = async (req, res) => {
     })
     if (result) {
 
-        req.app.locals.codigosCadastro = codigos.filter(
+        req.app.locals.codigosValidacao = codigos.filter(
             (item, index) => index != indexCodigo
         );
 
@@ -96,6 +98,7 @@ const validarCodigoVerificacao = async (req, res) => {
                 message: "Falha ao ativar a sua conta!"
             })
         } else {
+            await backupServidor(req.app)
             return res.json({
                 status: 200,
                 message: "Sua conta foi ativada com sucesso!"
@@ -114,7 +117,7 @@ const validarCodigoVerificacao = async (req, res) => {
 const loginUsuario = async (req, res) => {
     const { acesso, senha } = req.body;
     let codigoValidacao, result, indexCodigo;
-    const codigos = req.app.locals.codigosCadastro;
+    const codigos = req.app.locals.codigosValidacao;
 
     const { error, data } = await BuscarUsuario(acesso);
 
@@ -168,6 +171,7 @@ const loginUsuario = async (req, res) => {
                 codigo: codigoValidacao
             });
 
+            await backupServidor(req.app)
             return res.json({
                 status: 404,
                 message: "A sua conta ainda não foi ativada, um código será enviado para o seu e-mail para ativação!"

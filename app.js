@@ -8,6 +8,7 @@ const rotas = require("./src/configuracoes/rotas")
 const initializeApp = require("./src/utilidades/initialize_app")
 const initializeServer = require("./src/utilidades/initialize_server");
 const monitoramento = require("./src/utilidades/monitoramento");
+const connection = require("./src/configuracoes/mongo_db");
 
 
 //Configuração das politícas de acesso (todos os IP's)
@@ -31,18 +32,20 @@ const PORT = process.env.PORT || 4000;
 
 const loadServer = async () => {
     if (!app.locals.reload) {
-        await initializeApp(app)
         await initializeServer(app)
     }
 }
 
 loadServer()
 
-setInterval(async () => {
-    await monitoramento(app)
-}, 5000)
 
 
+connection.then(() => {
+    console.log("Conectado ao mongo db")
+}).catch((e) => {
+    console.log(e)
+    console.log("Falha na conexão")
+})
 
 
 //Carregamento e Configuração das Rotas
