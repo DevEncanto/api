@@ -1,6 +1,13 @@
+const connection = require("../configuracoes/mongo_db");
 const Config = require("../modelos/mongo_db/model_config");
 
 const initializeServer = async (app) => {
+
+    await connection().then((e) => {
+        console.log("API conectada ao mongodb")
+    }).catch((e) => {
+        console.log("Falha ao se conectar ao mongodb")
+    })
 
     initializeApp(app)
 

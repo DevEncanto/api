@@ -38,16 +38,6 @@ const loadServer = async () => {
 
 loadServer()
 
-
-
-connection.then(() => {
-    console.log("Conectado ao mongo db")
-}).catch((e) => {
-    console.log(e)
-    console.log("Falha na conexão")
-})
-
-
 //Carregamento e Configuração das Rotas
 
 rotas.forEach((route) => {
