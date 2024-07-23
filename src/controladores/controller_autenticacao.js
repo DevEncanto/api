@@ -66,7 +66,7 @@ const cadastroUsuario = async (req, res) => {
         })
     } else {
         return res.json({
-            status: 404,
+            status: 600,
             message: "Falha ao cadastrar o usuário!"
         })
     }
