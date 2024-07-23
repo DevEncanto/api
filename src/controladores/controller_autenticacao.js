@@ -73,7 +73,7 @@ const validarCodigoVerificacao = async (req, res) => {
     const codigo = req.body.codigo
     let result = false, indexCodigo, error, data, idUsuario
     let codigos = req.app.locals.codigosValidacao
-
+    
     codigos.forEach((item, index) => {
         if (item.codigo == codigo) {
             result = true
@@ -89,6 +89,7 @@ const validarCodigoVerificacao = async (req, res) => {
         );
 
         ({ error, data } = await AtualizarStatusConta(idUsuario, "ATIVA"));
+
 
         if (error) {
             return res.json({

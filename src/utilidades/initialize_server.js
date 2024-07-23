@@ -9,7 +9,7 @@ const initializeServer = async (app) => {
 
     const ambiente = process.env.NODE_DB_MODE
     const response = await Config.find().lean()
-
+    
     if (response) {
         const indexAmbiente = response.findIndex(item => item.ambiente === ambiente)
 
