@@ -15,10 +15,21 @@ const initializeServer = async (app) => {
 
         if (indexAmbiente !== -1) {
             const { data, _id } = response[indexAmbiente]
-            app.locals.codigosValidacao = data.codigosValidacao
-            app.locals.codigosTrocaSenha = data.codigosTrocaSenha
+            app.locals.codigosValidacao = data.codigosValidacao || []
+            app.locals.codigosTrocaSenha = data.codigosTrocaSenha || []
             app.locals.reload = true
             app.locals.idDocumentBackup = _id.toString()
+        } else {
+            await Config.create([
+                {
+                    ambiente: "producao",
+                    data: []
+                },
+                {
+                    ambiente: "desenvolvimento",
+                    data: []
+                }
+            ])
         }
     }
 };
