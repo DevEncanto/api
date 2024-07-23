@@ -7,7 +7,7 @@ const { gerarToken } = require("../utilidades/jwt")
 const backupServidor = require("../utilidades/backup")
 
 const cadastroUsuario = async (req, res) => {
-    console.log(req.body)
+    console.log(JSON.stringify(req.body))
     const { email, usuario, senha, nomeCompleto } = req.body
 
     let error, data, result = true, codigoIndicacao, codigoValidacao
