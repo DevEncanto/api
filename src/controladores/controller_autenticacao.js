@@ -8,6 +8,9 @@ const backupServidor = require("../utilidades/backup")
 
 const cadastroUsuario = async (req, res) => {
     console.log(JSON.stringify(req.body))
+
+
+    return res.json(req.body);
     const { email, usuario, senha, nomeCompleto } = req.body
 
     let error, data, result = true, codigoIndicacao, codigoValidacao
