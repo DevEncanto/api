@@ -7,8 +7,8 @@ const { gerarToken } = require("../utilidades/jwt")
 const backupServidor = require("../utilidades/backup")
 
 const cadastroUsuario = async (req, res) => {
-
-    const { email, usuario, senha } = req.body
+console.log(req.body)
+    const { email, usuario, senha, nomeCompleto } = req.body
 
     let error, data, result = true, codigoIndicacao, codigoValidacao
 
@@ -45,7 +45,7 @@ const cadastroUsuario = async (req, res) => {
         data = await VerificadorCodigoNumerico(codigoValidacao, req.app.locals.codigosCadastro)
     }
 
-    ({ error, data } = await CadastroUsuario(usuario, email, senha, codigoIndicacao))
+    ({ error, data } = await CadastroUsuario(usuario, email, senha, codigoIndicacao, nomeCompleto))
 
     if (error) { return res.json({ status: 403, message: "Falha ao cadastrar o usuário!" }) }
 
@@ -57,6 +57,7 @@ const cadastroUsuario = async (req, res) => {
         usuario: usuario,
         codigo: codigoValidacao
     })
+    console.log(data)
     if (data) {
         await backupServidor(req.app)
         return res.json({
