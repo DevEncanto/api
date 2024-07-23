@@ -129,7 +129,7 @@ const VerificarCodigo = async (codigo) => {
 
 const AtualizarStatusConta = async (idUsuario, status) => {
     return TryCatch(async () => {
-        await Usuarios.update({ statusConta: status }, {
+        return await Usuarios.update({ statusConta: status }, {
             where: {
                 idUsuario: idUsuario,
             },

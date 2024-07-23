@@ -1,4 +1,4 @@
-const TryCatch = async (query)=>{
+const TryCatch = async (query) => {
     try {
         return {
             error: false,

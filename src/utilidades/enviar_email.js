@@ -5,6 +5,7 @@ const emailSaqueRecusado = require("./modelos_emails/saque-recusado")
 const emailTrocaSenha = require("./modelos_emails/troca-senha")
 const emailConvite = require("./modelos_emails/convite")
 const emailPagamentoRealizado = require("./modelos_emails/pagamento-realizado")
+const reenvioEmail = require("./modelos_emails/nova_solicitacao")
 
 
 const smtp = nodemailer.createTransport({
@@ -28,6 +29,7 @@ const renderHTML = (mode, dados) => {
         case "saque-recusado": html = emailSaqueRecusado(dados); break;
         case "token-troca-senha": html = emailTrocaSenha(dados); break;
         case "convite": html = emailConvite(dados); break;
+        case "nova_solicitacao": html = reenvioEmail(dados); break;
     }
     return html
 }

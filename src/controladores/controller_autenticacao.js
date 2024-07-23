@@ -49,7 +49,9 @@ const cadastroUsuario = async (req, res) => {
     if (error) { return res.json({ status: 403, message: "Falha ao cadastrar o usuário!" }) }
     req.app.locals.codigosValidacao.push({
         idUsuario: data.idUsuario,
-        codigo: codigoValidacao
+        codigo: codigoValidacao,
+        email: email,
+        usuario: usuario
     })
     const sendEmail = await enviarEmail(email, "Cadastro Realizado", "cadastro", {
         usuario: usuario,
@@ -73,7 +75,7 @@ const validarCodigoVerificacao = async (req, res) => {
     const codigo = req.body.codigo
     let result = false, indexCodigo, error, data, idUsuario
     let codigos = req.app.locals.codigosValidacao
-    
+
     codigos.forEach((item, index) => {
         if (item.codigo == codigo) {
             result = true
@@ -84,19 +86,17 @@ const validarCodigoVerificacao = async (req, res) => {
     })
     if (result) {
 
-        req.app.locals.codigosValidacao = codigos.filter(
-            (item, index) => index != indexCodigo
-        );
-
         ({ error, data } = await AtualizarStatusConta(idUsuario, "ATIVA"));
 
-
-        if (error) {
+        if (error || data == undefined) {
             return res.json({
                 status: 401,
                 message: "Falha ao ativar a sua conta!"
             })
         } else {
+            req.app.locals.codigosValidacao = codigos.filter(
+                (item, index) => index != indexCodigo
+            );
             await backupServidor(req.app)
             return res.json({
                 status: 200,
@@ -159,7 +159,7 @@ const loginUsuario = async (req, res) => {
                     codigoValidacao = await geradorCodigoNumerico();
                     dataValido = await VerificadorCodigoNumerico(codigoValidacao, codigos);
                 }
-                req.app.locals.codigosCadastro.push({
+                req.app.locals.codigosValidacao.push({
                     idUsuario: usuario.idUsuario,
                     codigo: codigoValidacao
                 });
@@ -195,6 +195,51 @@ const loginUsuario = async (req, res) => {
     }
 };
 
+const reenviarCodigoValidacao = async (req, res) => {
+    try {
+        const codigos = req.app.locals.codigosValidacao
+        const acesso = req.body.acesso
+
+        result = codigos.some((item, index) => {
+            if (item.email === acesso || item.usuario == acesso) {
+                indexCodigo = index;
+                return true;
+            }
+            return false;
+        });
+
+        if (result) {
+            codigoValidacao = codigos[indexCodigo].codigo;
+        } else {
+            let dataValido = true;
+            while (dataValido) {
+                codigoValidacao = await geradorCodigoNumerico();
+                dataValido = await VerificadorCodigoNumerico(codigoValidacao, codigos);
+            }
+            req.app.locals.codigosValidacao.push({
+                idUsuario: usuario.idUsuario,
+                codigo: codigoValidacao
+            });
+        }
+
+        await enviarEmail(usuario.email, "Ativação da Conta", "nova_solicitacao", {
+            usuario: usuario.usuario,
+            codigo: codigoValidacao
+        });
+
+        await backupServidor(req.app)
+        return res.json({
+            status: 200,
+            message: "Enviamos o seu código de validação, verifique o seu e-mail"
+        })
+    } catch (error) {
+        return res.json({
+            status: 401,
+            message: "Não foi possível enviar o seu código de validação."
+        })
+    }
+}
+
 
 const validacaoToken = async (req, res) => {
 
@@ -203,5 +248,6 @@ module.exports = {
     cadastroUsuario,
     validarCodigoVerificacao,
     loginUsuario,
-    validacaoToken
+    validacaoToken,
+    reenviarCodigoValidacao
 }
