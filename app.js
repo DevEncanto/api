@@ -36,7 +36,9 @@ const loadServer = async () => {
     }
 }
 
-loadServer()
+(async () => {
+    await loadServer();
+})();
 
 //Carregamento e Configuração das Rotas
 

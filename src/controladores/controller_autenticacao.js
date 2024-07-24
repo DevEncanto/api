@@ -222,8 +222,8 @@ const reenviarCodigoValidacao = async (req, res) => {
             });
         }
 
-        await enviarEmail(usuario.email, "Ativação da Conta", "nova_solicitacao", {
-            usuario: usuario.usuario,
+        await enviarEmail(codigos[indexCodigo].email, "Ativação da Conta", "nova_solicitacao", {
+            usuario: codigos[indexCodigo].usuario,
             codigo: codigoValidacao
         });
 
@@ -233,6 +233,7 @@ const reenviarCodigoValidacao = async (req, res) => {
             message: "Enviamos o seu código de validação, verifique o seu e-mail"
         })
     } catch (error) {
+        console.log(error)
         return res.json({
             status: 401,
             message: "Não foi possível enviar o seu código de validação."
