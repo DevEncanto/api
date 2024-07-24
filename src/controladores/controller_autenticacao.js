@@ -47,6 +47,10 @@ const cadastroUsuario = async (req, res) => {
     ({ error, data } = await CadastroUsuario(usuario, email, senha, codigoIndicacao, nomeCompleto))
 
     if (error) { return res.json({ status: 403, message: "Falha ao cadastrar o usuário!" }) }
+    
+    console.log(JSON.stringify(`Array 1: ${req.app.locals.codigosValidacao}`))
+    console.log(JSON.stringify(`Array 2: ${req.app.locals.codigosTrocaSenha}`))
+    
     req.app.locals.codigosValidacao.push({
         idUsuario: data.idUsuario,
         codigo: codigoValidacao,
