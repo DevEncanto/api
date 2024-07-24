@@ -15,7 +15,7 @@ const carregarVariaveis = (app, response, ambiente) => {
 
     if (indexAmbiente !== -1) {
         const { data, _id } = response[indexAmbiente];
-        app.locals.codigosValidacao = data.codigosValidacao || [];
+        app.locals.codigosValidacao = data.codigosValidacao ? data.codigosValidacao :  [];
         app.locals.codigosTrocaSenha = data.codigosTrocaSenha || [];
         app.locals.reload = true;
         app.locals.idDocumentBackup = _id.toString();
@@ -23,6 +23,9 @@ const carregarVariaveis = (app, response, ambiente) => {
     } else {
         console.log("Ambiente não encontrado nos dados.");
     }
+
+    console.log(JSON.stringify(app.locals.codigosValidacao))
+    console.log(JSON.stringify(app.locals.codigosTrocaSenha))
 };
 
 const initializeServer = async (app) => {
