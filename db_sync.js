@@ -14,11 +14,15 @@
 })();
 
 (async () => {
-    const connection = require("./src/configuracoes/mongo_db")
-
+    const connection = require("./src/configuracoes/mongo_db");
+    const Config = require("./src/modelos/mongo_db/model_config");
     try {
         await connection;
         console.log("Conectado ao mongodb")
+        let response = await Config.deleteOne({ ambiente: "producao" })
+        console.log(response)
+        response = await Config.deleteOne({ ambiente: "desenvolvimento" })
+        console.log(response)
     } catch (e) {
         console.log(e)
     }
