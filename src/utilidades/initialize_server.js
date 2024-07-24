@@ -15,7 +15,7 @@ const carregarVariaveis = (app, response, ambiente) => {
 
     if (indexAmbiente !== -1) {
         const { data, _id } = response[indexAmbiente];
-        app.locals.codigosValidacao = data.codigosValidacao ? data.codigosValidacao :  [];
+        app.locals.codigosValidacao = data.codigosValidacao ? data.codigosValidacao : [];
         app.locals.codigosTrocaSenha = data.codigosTrocaSenha || [];
         app.locals.reload = true;
         app.locals.idDocumentBackup = _id.toString();
@@ -44,8 +44,20 @@ const initializeServer = async (app) => {
 
     if (!response.length) {
         await Config.create([
-            { ambiente: "producao", data: [] },
-            { ambiente: "desenvolvimento", data: [] }
+            {
+                ambiente: "producao", data: {
+                    reload: true,
+                    codigosTrocaSenha: [],
+                    codigosValidacao: []
+                }
+            },
+            {
+                ambiente: "desenvolvimento", data: {
+                    reload: true,
+                    codigosTrocaSenha: [],
+                    codigosValidacao: []
+                }
+            }
         ]);
 
         console.log("Novos valores inicializados.");
