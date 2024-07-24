@@ -10,7 +10,8 @@ const backupServidor = async (app) => {
         codigosTrocaSenha: app.locals.codigosTrocaSenha
     }
 
-    await Config.updateOne({ _id: id }, { $set: { data } })
+    const response = await Config.updateOne({ _id: id }, { $set: { data } })
+    console.log(response)
 }
 
 module.exports = backupServidor

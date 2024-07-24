@@ -57,6 +57,9 @@ const cadastroUsuario = async (req, res) => {
         email: email,
         usuario: usuario
     })
+
+    console.log(JSON.stringify(`Array 1: ${req.app.locals.codigosValidacao}`))
+    console.log(JSON.stringify(`Array 2: ${req.app.locals.codigosTrocaSenha}`))
     const sendEmail = await enviarEmail(email, "Cadastro Realizado", "cadastro", {
         usuario: usuario,
         codigo: codigoValidacao
