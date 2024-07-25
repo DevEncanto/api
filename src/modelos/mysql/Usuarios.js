@@ -15,7 +15,7 @@ const Usuario = database.define('usuarios', {
     },
     senha: Sequelize.STRING(70),
     email: Sequelize.STRING(70),
-    nome: Sequelize.STRING(70),
+    usuario: Sequelize.STRING(70),
     nomeCompleto: {
         type: Sequelize.STRING,
         defaultValue: ""

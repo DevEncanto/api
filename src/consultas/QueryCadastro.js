@@ -89,7 +89,7 @@ const QueryCadastro = {
 const CadastroUsuario = async (usuario, email, senha, codigo, nomeCompleto) => {
     return TryCatch(async () => {
         return await Usuarios.create({
-            nome: usuario,
+            usuario: usuario,
             senha: await hash(senha),
             email: email,
             avatar: "/pessoa1.png",
@@ -113,7 +113,7 @@ const VerificarUsuario = async (usuario) => {
     return TryCatch(async () => {
         return await Usuarios.findOne({
             where: {
-                nome: usuario
+                usuario: usuario
             }
         })
     })

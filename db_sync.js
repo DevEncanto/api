@@ -10,7 +10,7 @@
     const Usuarios = require("./src/modelos/mysql/Usuarios")
     await db.sync({ force: true })
     console.log("MySQL configurado!")
-    process.exit(1);
+
 })();
 
 (async () => {
@@ -26,4 +26,5 @@
     } catch (e) {
         console.log(e)
     }
+    process.exit(1);
 })();

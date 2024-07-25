@@ -47,10 +47,10 @@ const cadastroUsuario = async (req, res) => {
     ({ error, data } = await CadastroUsuario(usuario, email, senha, codigoIndicacao, nomeCompleto))
 
     if (error) { return res.json({ status: 403, message: "Falha ao cadastrar o usuário!" }) }
-    
+
     console.log(JSON.stringify(`Array 1: ${req.app.locals.codigosValidacao}`))
     console.log(JSON.stringify(`Array 2: ${req.app.locals.codigosTrocaSenha}`))
-    
+
     req.app.locals.codigosValidacao.push({
         idUsuario: data.idUsuario,
         codigo: codigoValidacao,
@@ -203,17 +203,37 @@ const loginUsuario = async (req, res) => {
 };
 
 const reenviarCodigoValidacao = async (req, res) => {
-    try {
-        const codigos = req.app.locals.codigosValidacao
-        const acesso = req.body.acesso
+    const { acesso, mode } = req.body;
+    let data;
 
-        result = codigos.some((item, index) => {
-            if (item.email === acesso || item.usuario == acesso) {
+    ({ data } = await VerificarEmail(acesso));
+
+    if (!data) {
+        return res.json({
+            status: 401,
+            message: "Não encontramos o seu e-mail em nossa base de dados!"
+        });
+    }
+    const config = {
+        array: mode == "password" ? "codigosTrocaSenha" : "codigosValidacao",
+        titulo: mode == "password" ? "Recuperação de Senha" : "Ativação da Conta",
+        html: mode == "password" ? "token-troca-senha" : "nova_solicitacao"
+    }
+
+    const codigos = req.app.locals[config.array]
+
+    try {
+        const result = codigos.some((item, index) => {
+            if (mode === "password" && item.email === acesso) {
+                indexCodigo = index;
+                return true;
+            }
+            if (mode !== "password" && (item.email === acesso || item.usuario === acesso)) {
                 indexCodigo = index;
                 return true;
             }
             return false;
-        });
+        })
 
         if (result) {
             codigoValidacao = codigos[indexCodigo].codigo;
@@ -223,30 +243,34 @@ const reenviarCodigoValidacao = async (req, res) => {
                 codigoValidacao = await geradorCodigoNumerico();
                 dataValido = await VerificadorCodigoNumerico(codigoValidacao, codigos);
             }
-            req.app.locals.codigosValidacao.push({
-                idUsuario: usuario.idUsuario,
-                codigo: codigoValidacao
-            });
+
+            req.app.locals[config.array].push({
+                idUsuario: data.idUsuario,
+                codigo: codigoValidacao,
+                email: data.email,
+                usuario: data.nome
+            })
         }
 
-        await enviarEmail(codigos[indexCodigo].email, "Ativação da Conta", "nova_solicitacao", {
-            usuario: codigos[indexCodigo].usuario,
+        await enviarEmail(data.email, config.titulo, config.html, {
+            usuario: data.nome,
             codigo: codigoValidacao
         });
 
-        await backupServidor(req.app)
+        await backupServidor(req.app);
         return res.json({
             status: 200,
             message: "Enviamos o seu código de validação, verifique o seu e-mail"
-        })
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.json({
             status: 401,
             message: "Não foi possível enviar o seu código de validação."
-        })
+        });
     }
-}
+};
+
 
 
 const validacaoToken = async (req, res) => {
