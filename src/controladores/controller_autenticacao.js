@@ -252,7 +252,7 @@ const reenviarCodigoValidacao = async (req, res) => {
             })
         }
 
-        await enviarEmail(data.email, config.titulo, config.html, {
+        await enviarEmail(acesso, config.titulo, config.html, {
             usuario: data.nome,
             codigo: codigoValidacao
         });
