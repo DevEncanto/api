@@ -26,10 +26,11 @@ const carregarVariaveis = (app, response, ambiente) => {
 };
 
 const initializeServer = async (app) => {
-    try {g
+    try {
         await connection;
         console.log("Conectado com sucesso ao MongoDB");
     } catch (e) {
+        console.log(e)
         console.log("Falha ao se conectar com o MongoDB.");
         return;
     }
