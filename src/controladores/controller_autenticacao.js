@@ -74,7 +74,7 @@ const cadastroUsuario = async (req, res) => {
 
 }
 const validarCodigoVerificacao = async (req, res) => {
-    const { codigo, mode, data } = req.body;
+    const { codigo, mode, senha } = req.body;
     const array = mode === "password" ? "codigosTrocaSenha" : "codigosValidacao";
     const codigos = req.app.locals[array];
 
@@ -87,10 +87,10 @@ const validarCodigoVerificacao = async (req, res) => {
     }
 
     const idUsuario = item.idUsuario;
-    let error, Data;
+    let error, data;
 
     if (mode === "password") {
-        ({ error, Data } = await AtualizarSenha(idUsuario, data));
+        ({ error, data } = await AtualizarSenha(idUsuario, senha));
         if (error) {
             return res.json({
                 status: 401,
@@ -98,11 +98,11 @@ const validarCodigoVerificacao = async (req, res) => {
             });
         }
     } else if (mode === "register") {
-        ({ error, Data } = await AtualizarStatusConta(idUsuario, "ATIVA"));
-        if (error || !Data) {
+        ({ error, data } = await AtualizarStatusConta(idUsuario, "ATIVA"));
+        if (error) {
             return res.json({
                 status: 401,
-                message: "Falha ao atualizar a sua conta!"
+                message: "Falha ao ativar a sua conta!"
             });
         }
     }
