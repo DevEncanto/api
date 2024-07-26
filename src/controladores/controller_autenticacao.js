@@ -9,7 +9,7 @@ const backupServidor = require("../utilidades/backup")
 const cadastroUsuario = async (req, res) => {
     const { email, usuario, senha, nomeCompleto } = req.body
 
-    let error, data, result = true, codigoIndicacao, codigoValidacao
+    let error, data, codigoIndicacao, codigoValidacao
 
     ({ error, data } = await VerificarEmail(email))
 
