@@ -17,7 +17,7 @@ const gerarToken = async (idUsuario) => {
         idUsuario: idUsuario
     }
     const params = {
-        expiresIn: 80000
+        expiresIn: 10000
     }
 
     return jwt.sign(data, SECRET_KEY, params)

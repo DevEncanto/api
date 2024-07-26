@@ -11,7 +11,6 @@ const backupServidor = async (app) => {
     }
 
     const response = await Config.updateOne({ _id: id }, { $set: { data } })
-    console.log(response)
 }
 
 module.exports = backupServidor

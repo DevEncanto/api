@@ -23,13 +23,10 @@ const carregarVariaveis = (app, response, ambiente) => {
     } else {
         console.log("Ambiente não encontrado nos dados.");
     }
-
-    console.log(JSON.stringify(app.locals.codigosValidacao))
-    console.log(JSON.stringify(app.locals.codigosTrocaSenha))
 };
 
 const initializeServer = async (app) => {
-    try {
+    try {g
         await connection;
         console.log("Conectado com sucesso ao MongoDB");
     } catch (e) {

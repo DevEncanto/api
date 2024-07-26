@@ -1,9 +1,9 @@
-const { VerificarEmail, VerificarUsuario, CadastroUsuario, VerificarCodigo, VerificadorCodigoNumerico, AtualizarStatusConta } = require("../consultas/QueryCadastro")
+const { VerificarEmail, VerificarUsuario, CadastroUsuario, VerificarCodigo, VerificadorCodigoNumerico, AtualizarStatusConta, AtualizarSenha } = require("../consultas/QueryCadastro")
 const { geradorCodigo, geradorCodigoNumerico } = require("../utilidades/stringAleatoria")
 const enviarEmail = require("../utilidades/enviar_email")
 const { BuscarUsuario } = require("../consultas/QueryLogin")
 const { compare } = require("../utilidades/criptografia")
-const { gerarToken } = require("../utilidades/jwt")
+const { gerarToken, tokenPayload } = require("../utilidades/jwt")
 const backupServidor = require("../utilidades/backup")
 
 const cadastroUsuario = async (req, res) => {
@@ -48,9 +48,6 @@ const cadastroUsuario = async (req, res) => {
 
     if (error) { return res.json({ status: 403, message: "Falha ao cadastrar o usuário!" }) }
 
-    console.log(JSON.stringify(`Array 1: ${req.app.locals.codigosValidacao}`))
-    console.log(JSON.stringify(`Array 2: ${req.app.locals.codigosTrocaSenha}`))
-
     req.app.locals.codigosValidacao.push({
         idUsuario: data.idUsuario,
         codigo: codigoValidacao,
@@ -58,8 +55,6 @@ const cadastroUsuario = async (req, res) => {
         usuario: usuario
     })
 
-    console.log(JSON.stringify(`Array 1: ${req.app.locals.codigosValidacao}`))
-    console.log(JSON.stringify(`Array 2: ${req.app.locals.codigosTrocaSenha}`))
     const sendEmail = await enviarEmail(email, "Cadastro Realizado", "cadastro", {
         usuario: usuario,
         codigo: codigoValidacao
@@ -79,45 +74,48 @@ const cadastroUsuario = async (req, res) => {
 
 }
 const validarCodigoVerificacao = async (req, res) => {
-    const codigo = req.body.codigo
-    let result = false, indexCodigo, error, data, idUsuario
-    let codigos = req.app.locals.codigosValidacao
+    const { codigo, mode, data } = req.body;
+    const array = mode === "password" ? "codigosTrocaSenha" : "codigosValidacao";
+    const codigos = req.app.locals[array];
 
-    codigos.forEach((item, index) => {
-        if (item.codigo == codigo) {
-            result = true
-            indexCodigo = index
-            idUsuario = item.idUsuario
-            return
-        }
-    })
-    if (result) {
-
-        ({ error, data } = await AtualizarStatusConta(idUsuario, "ATIVA"));
-
-        if (error || data == undefined) {
-            return res.json({
-                status: 401,
-                message: "Falha ao ativar a sua conta!"
-            })
-        } else {
-            req.app.locals.codigosValidacao = codigos.filter(
-                (item, index) => index != indexCodigo
-            );
-            await backupServidor(req.app)
-            return res.json({
-                status: 200,
-                message: "Sua conta foi ativada com sucesso!"
-            })
-        }
-
-    } else {
+    const item = codigos.find(item => item.codigo === codigo);
+    if (!item) {
         return res.json({
             status: 402,
             message: "Código incorreto!"
-        })
+        });
     }
-}
+
+    const idUsuario = item.idUsuario;
+    let error, Data;
+
+    if (mode === "password") {
+        ({ error, Data } = await AtualizarSenha(idUsuario, data));
+        if (error) {
+            return res.json({
+                status: 401,
+                message: "Falha ao alterar a sua senha"
+            });
+        }
+    } else if (mode === "register") {
+        ({ error, Data } = await AtualizarStatusConta(idUsuario, "ATIVA"));
+        if (error || !Data) {
+            return res.json({
+                status: 401,
+                message: "Falha ao atualizar a sua conta!"
+            });
+        }
+    }
+
+    req.app.locals[array] = codigos.filter(c => c.codigo !== codigo);
+    await backupServidor(req.app);
+
+    return res.json({
+        status: 200,
+        message: mode === "password" ? "Sua senha foi atualiza com sucesso!" : "Sua conta foi ativada com sucesso!"
+    });
+};
+
 
 
 const loginUsuario = async (req, res) => {
@@ -188,11 +186,13 @@ const loginUsuario = async (req, res) => {
 
     if (isSenhaCorreta) {
         const token = await gerarToken(usuario.idUsuario);
+        const { exp } = await tokenPayload(token)
         return res.json({
             status: 200,
             message: "Login realizado com sucesso",
             token,
-            idUsuario: usuario.idUsuario
+            idUsuario: usuario.idUsuario,
+            expires: exp
         });
     } else {
         return res.json({
@@ -248,12 +248,12 @@ const reenviarCodigoValidacao = async (req, res) => {
                 idUsuario: data.idUsuario,
                 codigo: codigoValidacao,
                 email: data.email,
-                usuario: data.nome
+                usuario: data.usuario
             })
         }
 
         await enviarEmail(acesso, config.titulo, config.html, {
-            usuario: data.nome,
+            usuario: data.usuario,
             codigo: codigoValidacao
         });
 

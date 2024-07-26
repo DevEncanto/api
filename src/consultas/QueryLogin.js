@@ -34,7 +34,7 @@ const BuscarUsuario = async (dataQuery) => {
             {
                 where: {
                     [Op.or]: [
-                        { nome: dataQuery },
+                        { usuario: dataQuery },
                         { email: dataQuery }
                     ]
                 }

@@ -137,6 +137,16 @@ const AtualizarStatusConta = async (idUsuario, status) => {
     })
 }
 
+const AtualizarSenha = async (idUsuario, senha) => {
+    return TryCatch(async () => {
+        return await Usuarios.update({ senha: await hash(senha) }, {
+            where: {
+                idUsuario: idUsuario,
+            },
+        })
+    })
+}
+
 
 const VerificadorCodigoNumerico = async (codigo = 0, codigosCadastro = []) => {
     let result = false
@@ -157,5 +167,6 @@ module.exports = {
     VerificarUsuario,
     VerificarCodigo,
     VerificadorCodigoNumerico,
-    AtualizarStatusConta
+    AtualizarStatusConta,
+    AtualizarSenha
 }
