@@ -10,10 +10,6 @@
     const Usuarios = require("./src/modelos/mysql/Usuarios")
     await db.sync({ force: true })
     console.log("MySQL configurado!")
-
-})();
-
-(async () => {
     const connection = require("./src/configuracoes/mongo_db");
     const Config = require("./src/modelos/mongo_db/model_config");
     try {
@@ -26,4 +22,5 @@
     } catch (e) {
         console.log(e)
     }
+    process.exit(1)
 })();
