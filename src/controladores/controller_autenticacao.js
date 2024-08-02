@@ -125,8 +125,6 @@ const loginUsuario = async (req, res) => {
 
     const { error, data } = await BuscarUsuario(acesso);
 
-
-    console.log(data)
     if (error || data == null) {
         return res.json({
             status: 401,
