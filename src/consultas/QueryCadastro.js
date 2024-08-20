@@ -86,15 +86,13 @@ const QueryCadastro = {
     }
 }
 
-const CadastroUsuario = async (usuario, email, senha, codigo, nomeCompleto) => {
+const CadastroUsuario = async (usuario, senha) => {
     return TryCatch(async () => {
         return await Usuarios.create({
             usuario: usuario,
             senha: await hash(senha),
-            email: email,
             avatar: "/pessoa1.png",
-            codigoIndicacao: codigo,
-            nomeCompleto: nomeCompleto
+            
         })
     })
 }

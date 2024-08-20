@@ -4,66 +4,34 @@ const Sequelize = require("sequelize")
 //Importação da Conexão com o Banco de Dados
 const database = require("../../configuracoes/banco_dados")
 
+const Pessoa = require("../mysql/Pessoas")
+
 //Definição do Model Usuários
 
 const Usuario = database.define('usuarios', {
-    idUsuario: {
+    id_usuario: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    senha: Sequelize.STRING(70),
-    email: Sequelize.STRING(70),
-    usuario: Sequelize.STRING(70),
-    nomeCompleto: {
-        type: Sequelize.STRING,
-        defaultValue: ""
+    id_pessoa: Sequelize.INTEGER,
+    tipo_usuario: {
+        type: Sequelize.STRING(30),
+        defaultValue: "comum"
     },
+    senha: Sequelize.STRING(70),
+    usuario: Sequelize.STRING(70),
     avatar: {
         type: Sequelize.STRING(30),
         defaultValue: "/default.png"
-    },
-    totalSaques: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    },
-    saldo: {
-        type: Sequelize.DOUBLE,
-        defaultValue: 0
-    },
-    statusConta: {
-        type: Sequelize.STRING,
-        defaultValue: "VALIDAÇÃO"
-    },
-    totalDesafios: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    },
-    tipoUsuario: {
-        type: Sequelize.STRING,
-        defaultValue: "USER"
-    },
-    codigoIndicacao: {
-        type: Sequelize.STRING(20),
-        defaultValue: ""
-    },
-    codigoResgatado: {
-        type: Sequelize.STRING(20),
-        defaultValue: ""
-    },
-    pix: {
-        type: Sequelize.STRING(100),
-        defaultValue: ""
-    },
-    banco: {
-        type: Sequelize.STRING(100),
-        defaultValue: ""
-    },
-    recebedor: {
-        type: Sequelize.STRING(100),
-        defaultValue: ""
-    },
+    }
 })
+
+Pessoa.belongsTo(Usuario, {
+    constraint: true,
+    foreignKey: "id_pessoa"
+})
+
 
 module.exports = Usuario

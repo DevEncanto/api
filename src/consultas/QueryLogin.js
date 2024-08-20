@@ -29,16 +29,13 @@ const QueryLogin = {
 }
 
 const BuscarUsuario = async (dataQuery) => {
+    console.log(dataQuery)
     return TryCatch(async () => {
-        return await Usuarios.findOne(
-            {
-                where: {
-                    [Op.or]: [
-                        { usuario: dataQuery },
-                        { email: dataQuery }
-                    ]
-                }
-            })
+        return await Usuarios.findOne({
+            where: {
+                usuario: dataQuery
+            }
+        })
     })
 }
 
