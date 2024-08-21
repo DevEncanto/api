@@ -1,5 +1,5 @@
 const { VerificarUsuario, CadastroUsuario } = require("../consultas/QueryCadastro")
-const { BuscarUsuario } = require("../consultas/QueryLogin")
+const { BuscarUsuario, BuscarPermissoes } = require("../consultas/QueryLogin")
 const { compare } = require("../utilidades/criptografia")
 const { gerarToken, tokenPayload } = require("../utilidades/jwt")
 
@@ -36,7 +36,9 @@ const cadastroUsuario = async (req, res) => {
 
 const loginUsuario = async (req, res) => {
     const { acesso, senha } = req.body;
-    const { error, data } = await BuscarUsuario(acesso);
+    ({ error, data } = await BuscarUsuario(acesso));
+    
+    let permissoes = []
 
     if (error || data == null) {
         return res.json({
@@ -46,10 +48,15 @@ const loginUsuario = async (req, res) => {
     }
 
     const usuario = data;
-
     const isSenhaCorreta = await compare(senha, usuario.senha);
-    console.log(isSenhaCorreta)
 
+    ({ error, data } = await BuscarPermissoes(data.id_usuario))
+
+    if (data) {
+        data.forEach((permissao) => {
+            permissoes.push(permissao.nome)
+        })
+    }
 
     if (isSenhaCorreta) {
         const token = await gerarToken(usuario.idUsuario);
@@ -59,7 +66,8 @@ const loginUsuario = async (req, res) => {
             message: "Login realizado com sucesso",
             token,
             idUsuario: usuario.idUsuario,
-            expires: exp
+            expires: exp,
+            permissoes: [...permissoes]
         });
     } else {
         return res.json({

@@ -92,7 +92,6 @@ const CadastroUsuario = async (usuario, senha) => {
             usuario: usuario,
             senha: await hash(senha),
             avatar: "/pessoa1.png",
-            
         })
     })
 }

@@ -16,4 +16,12 @@ and tipousuario = "USER"`
 
 const QuerySaldoUsuarios = `select sum(saldo) as valor from usuarios where saldo > 4`
 
-module.exports = { QueryFluxoCaixa, QueryMediaBaixa, QuerySaldoUsuarios}
+const ListarPermissoes = `SELECT p.nome FROM permissoes_usuarios as pu 
+	inner join permissoes as p on pu.id_permissao = p.id_permissao
+    inner join usuarios as u on u.id_usuario = pu.id_usuario
+where u.id_usuario = `
+
+
+
+
+module.exports = { QueryFluxoCaixa, QueryMediaBaixa, QuerySaldoUsuarios,ListarPermissoes}
