@@ -1,4 +1,4 @@
-const { VerificarUsuario, CadastroUsuario } = require("../consultas/QueryCadastro")
+const { VerificarUsuario, CadastroUsuario } = require("../consultas/query_cadastro")
 const { BuscarUsuario, BuscarPermissoes } = require("../consultas/QueryLogin")
 const { compare } = require("../utilidades/criptografia")
 const { gerarToken, tokenPayload } = require("../utilidades/jwt")

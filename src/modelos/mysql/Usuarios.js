@@ -16,19 +16,11 @@ const Usuario = database.define('usuarios', {
         primaryKey: true
     },
     id_pessoa: Sequelize.INTEGER,
-    tipo_usuario: {
-        type: Sequelize.STRING(30),
-        defaultValue: "comum"
-    },
     senha: Sequelize.STRING(70),
     usuario: Sequelize.STRING(70),
-    avatar: {
-        type: Sequelize.STRING(30),
-        defaultValue: "/default.png"
-    }
 })
 
-Pessoa.belongsTo(Usuario, {
+Usuario.belongsTo(Pessoa, {
     constraint: true,
     foreignKey: "id_pessoa"
 })

@@ -13,20 +13,63 @@ const Pessoa = database.define('pessoas', {
         allowNull: false,
         primaryKey: true
     },
-    nome: Sequelize.STRING(70),
-    cpf_cnpj: Sequelize.STRING(25),
-    email: Sequelize.STRING(70),
-    data_nascimento: Sequelize.STRING(20),
-    telefone: Sequelize.STRING(20),
-    endereco: Sequelize.TEXT(),
-    cep: Sequelize.STRING(15),
-    bairro: Sequelize.STRING(70),
-    estado: Sequelize.STRING(7),
-    estado_civil: Sequelize.STRING(20),
-    pix: Sequelize.TEXT(),
-    agencia: Sequelize.STRING(15),
-    conta: Sequelize.STRING(15),
-    banco: Sequelize.STRING(30),
+    nome: {
+        type: Sequelize.STRING(70),
+        defaultValue: ""
+    },
+    cpf_cnpj: {
+        type: Sequelize.STRING(25),
+        defaultValue: ""
+    },
+    email: {
+        type: Sequelize.STRING(70),
+        defaultValue: ""
+    },
+    data_nascimento: {
+        type: Sequelize.STRING(20),
+        defaultValue: ""
+    },
+    telefone: {
+        type: Sequelize.STRING(20),
+        defaultValue: ""
+    },
+    endereco: {
+        type:
+            Sequelize.TEXT,
+        defaultValue: ""
+    },
+    cep: {
+        type: Sequelize.STRING(15),
+        defaultValue: ""
+    },
+    bairro: {
+        type: Sequelize.STRING(70),
+        defaultValue: ""
+    },
+    estado: {
+        type: Sequelize.STRING(7),
+        defaultValue: ""
+    },
+    estado_civil: {
+        type: Sequelize.STRING(20),
+        defaultValue: "Solteiro(a)"
+    },
+    pix: {
+        type: Sequelize.TEXT,
+        defaultValue: ""
+    },
+    agencia: {
+        type: Sequelize.STRING(15),
+        defaultValue: ""
+    },
+    conta: {
+        type: Sequelize.STRING(15),
+        defaultValue: ""
+    },
+    banco: {
+        type: Sequelize.STRING(30),
+        defaultValue: ""
+    }
 })
 
 module.exports = Pessoa

@@ -8,7 +8,7 @@ const database = require("../../configuracoes/banco_dados")
 const Area = require("../mysql/Areas")
 
 
-const PontosMapa = database.define('pessoas', {
+const PontosMapa = database.define('pontos_mapa', {
   id_ponto: {
     type: Sequelize.INTEGER,
     autoIncrement: true,

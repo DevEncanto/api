@@ -8,7 +8,7 @@ const database = require("../../configuracoes/banco_dados")
 
 const Pessoa = require("../mysql/Pessoas")
 
-const Colaborador = database.define('pessoas', {
+const Colaborador = database.define('colaboradores', {
   id_colaborador: {
     type: Sequelize.INTEGER,
     autoIncrement: true,

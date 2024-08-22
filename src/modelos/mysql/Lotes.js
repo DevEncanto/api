@@ -6,7 +6,7 @@ const database = require("../../configuracoes/banco_dados")
 
 //Definição do Model Usuários
 
-const Lotes = database.define('pessoas', {
+const Lotes = database.define('lotes', {
   id_lote: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
