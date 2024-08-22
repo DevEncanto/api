@@ -43,6 +43,7 @@ const cadastroPessoa = async (req, res) => {
 }
 
 const cadastroFornecedor = async (req, res) => {
+    
     const dados = req.body;
 
     const dados_pessoa = {

@@ -3,6 +3,7 @@
 const database = require("../db")
 
 //Importação da model Usuários
+
 const Usuarios = require("../models/Usuarios")
 const Contas = require("../models/Contas")
 const Saques = require("../models/Saques")

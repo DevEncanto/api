@@ -1,7 +1,8 @@
 const { VerificarUsuario, CadastroUsuario } = require("../consultas/query_cadastro")
 const { BuscarUsuario, BuscarPermissoes } = require("../consultas/QueryLogin")
 const { compare } = require("../utilidades/criptografia")
-const { gerarToken, tokenPayload } = require("../utilidades/jwt")
+const DadosIniciais = require("../utilidades/dados_iniciais")
+const { gerarToken, tokenPayload, validarToken } = require("../utilidades/jwt")
 
 const cadastroUsuario = async (req, res) => {
     const { usuario, senha } = req.body;
@@ -37,7 +38,7 @@ const cadastroUsuario = async (req, res) => {
 const loginUsuario = async (req, res) => {
     const { acesso, senha } = req.body;
     ({ error, data } = await BuscarUsuario(acesso));
-    
+
     let permissoes = []
 
     if (error || data == null) {
@@ -50,24 +51,20 @@ const loginUsuario = async (req, res) => {
     const usuario = data;
     const isSenhaCorreta = await compare(senha, usuario.senha);
 
-    ({ error, data } = await BuscarPermissoes(data.id_usuario))
-
-    if (data) {
-        data.forEach((permissao) => {
-            permissoes.push(permissao.nome)
-        })
-    }
-
     if (isSenhaCorreta) {
         const token = await gerarToken(usuario.idUsuario);
         const { exp } = await tokenPayload(token)
+
+        const dados_iniciais = await DadosIniciais(data.id_usuario)
+
         return res.json({
             status: 200,
             message: "Login realizado com sucesso",
             token,
             idUsuario: usuario.idUsuario,
             expires: exp,
-            permissoes: [...permissoes]
+            permissoes: [...permissoes],
+            dados: dados_iniciais
         });
     } else {
         return res.json({
@@ -77,7 +74,32 @@ const loginUsuario = async (req, res) => {
     }
 };
 
+const ValidarToken = async (req, res) => {
+    try {
+        const tokenHeader = req.headers["authorization"]
+        const token = tokenHeader.split(" ")[1]
+
+        if (await validarToken(token)) {
+            res.json({
+                message: "Token válido!",
+                status: true
+            })
+        } else {
+            res.json({
+                message: "Token inválido!",
+                status: false
+            })
+        }
+    } catch (error) {
+        res.json({
+            message: "Token inválido!",
+            status: false
+        })
+    }
+}
+
 module.exports = {
     cadastroUsuario,
-    loginUsuario
+    loginUsuario,
+    ValidarToken
 }
