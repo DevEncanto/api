@@ -77,7 +77,7 @@ const cadastroFornecedor = async (req, res) => {
     if (data) {
         return res.json({
             status: 502,
-            message: "Já existe uma pessoa cadastrada com esse CPF ou CNPJ!"
+            message: "CPF ou CNPJ já está cadastrado!"
         })
     }
 
@@ -94,15 +94,21 @@ const cadastroFornecedor = async (req, res) => {
 
     ({ error, data } = await CadastroFornecedor(pessoa.id_pessoa, dados.inscricao, dados.fantasia))
 
+    console.log(data)
+
     if (data) {
         return res.json({
             status: 200,
-            message: "O novo fornecedor foi cadastrado com sucesso!"
+            message: "Fornecedor cadastrado com sucesso!",
+            fornecedor: {
+                id_fornecedor: data.id_fornecedor,
+                fantasia: data.fantasia
+            }
         })
     } else {
         return res.json({
             status: 504,
-            message: "Falha ao cadastrar o novo fornecedor!"
+            message: "Falha ao cadastrar o fornecedor!"
         })
     }
 
