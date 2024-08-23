@@ -36,6 +36,7 @@ const cadastroUsuario = async (req, res) => {
 }
 
 const loginUsuario = async (req, res) => {
+
     const { acesso, senha } = req.body;
     ({ error, data } = await BuscarUsuario(acesso));
 
