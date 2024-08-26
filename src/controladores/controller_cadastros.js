@@ -1,4 +1,4 @@
-const { VerificarPessoa, CadastroPessoa, CadastroFornecedor, CadastroCategoriaInsumo, VerificarCategoria } = require("../consultas/query_cadastros")
+const { VerificarPessoa, CadastroPessoa, CadastroFornecedor, CadastroCategoriaInsumo, VerificarCategoria, VerificarInsumo, CadastroInsumo } = require("../consultas/query_cadastros")
 
 const cadastroPessoa = async (req, res) => {
 
@@ -80,7 +80,7 @@ const cadastroFornecedor = async (req, res) => {
         })
     }
 
-    ({ error, data } = await CadastroPessoa(dados_pessoa))
+    ({ error, data } = await CadastroPessoa(dados_pessoa));
 
     if (error) {
         return res.json({
@@ -109,6 +109,52 @@ const cadastroFornecedor = async (req, res) => {
         })
     }
 
+}
+
+const cadastroInsumo = async (req, res) => {
+    console.log(req.body)
+
+    const dados = {
+        nome: req.body.nome,
+        id_categoria_insumo: req.body.id_categoria_insumo,
+        composicao: req.body.composicao,
+        unidade: req.body.unidade,
+        minimo: req.body.minimo
+    };
+
+    ({ error, data } = await VerificarInsumo(dados.nome));
+
+    if (data) {
+        return res.json({
+            status: 501,
+            message: "O insumo já está cadastrado!"
+        })
+    }
+
+    if (error) {
+        return res.json({
+            status: 502,
+            message: "Falha ao cadastrar a nova categoria!"
+        })
+    }
+
+    ({ error, data } = await CadastroInsumo(dados));
+
+    if (data) {
+        return res.json({
+            status: 200,
+            message: "Insumo cadastrado com sucesso!",
+            insumo: {
+                id_insumo: data.id_insumo,
+                nome: data.nome
+            }
+        })
+    } else {
+        return res.json({
+            status: 503,
+            message: "Falha ao cadastrar a novo insumo!"
+        })
+    }
 }
 
 const cadastroCategoriaInsumo = async (req, res) => {
@@ -157,5 +203,6 @@ const cadastroCategoriaInsumo = async (req, res) => {
 module.exports = {
     cadastroPessoa,
     cadastroFornecedor,
-    cadastroCategoriaInsumo
+    cadastroCategoriaInsumo,
+    cadastroInsumo
 }

@@ -31,6 +31,15 @@ const VerificarCategoria = async (nome) => {
     })
   })
 }
+const VerificarInsumo = async (nome) => {
+  return TryCatch(async () => {
+    return await Insumos.findOne({
+      where: {
+        nome: nome
+      }
+    })
+  })
+}
 
 
 const CadastroPessoa = async (pessoa) => {
@@ -68,5 +77,6 @@ module.exports = {
   CadastroFornecedor,
   CadastroCategoriaInsumo,
   CadastroInsumo,
-  VerificarCategoria
+  VerificarCategoria,
+  VerificarInsumo
 }

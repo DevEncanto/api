@@ -1,5 +1,5 @@
 const { VerificarUsuario, CadastroUsuario } = require("../consultas/query_cadastro")
-const { BuscarUsuario, BuscarPermissoes } = require("../consultas/QueryLogin")
+const { BuscarUsuario } = require("../consultas/QueryLogin")
 const { compare } = require("../utilidades/criptografia")
 const DadosIniciais = require("../utilidades/dados_iniciais")
 const { gerarToken, tokenPayload, validarToken } = require("../utilidades/jwt")

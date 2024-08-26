@@ -18,7 +18,8 @@ const Insumos = database.define('insumos', {
   nome: Sequelize.STRING(70),
   id_categoria_insumo: Sequelize.INTEGER,
   composicao: Sequelize.TEXT,
-  unidade: Sequelize.STRING(8)
+  unidade: Sequelize.STRING(8),
+  minimo: Sequelize.DOUBLE
 })
 
 Insumos.belongsTo(Categoria_Insumo, {
