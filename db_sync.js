@@ -8,5 +8,8 @@
     const Lotes = require("./src/modelos/mysql/Lotes")
     const Areas = require("./src/modelos/mysql/Areas")
     const PontosMapa = require("./src/modelos/mysql/PontosMapa")
+    const Categoria_Insumo = require("./src/modelos/mysql/Categoria_Insumos")
+    const Insumos = require("./src/modelos/mysql/Insumos")
+    
     await db.sync({ force: true })
 })();

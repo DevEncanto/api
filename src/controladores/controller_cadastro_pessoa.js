@@ -1,4 +1,4 @@
-const { VerificarPessoa, CadastroPessoa, CadastroFornecedor } = require("../consultas/query_cadastro_pessoa")
+const { VerificarPessoa, CadastroPessoa, CadastroFornecedor, CadastroCategoriaInsumo, VerificarCategoria } = require("../consultas/query_cadastros")
 
 const cadastroPessoa = async (req, res) => {
 
@@ -43,7 +43,7 @@ const cadastroPessoa = async (req, res) => {
 }
 
 const cadastroFornecedor = async (req, res) => {
-    
+
     const dados = req.body;
 
     const dados_pessoa = {
@@ -64,9 +64,8 @@ const cadastroFornecedor = async (req, res) => {
         banco: dados.banco
     };
 
-
     ({ error, data } = await VerificarPessoa(dados.cpf_cnpj));
-    
+
     if (error) {
         return res.json({
             status: 501,
@@ -94,8 +93,6 @@ const cadastroFornecedor = async (req, res) => {
 
     ({ error, data } = await CadastroFornecedor(pessoa.id_pessoa, dados.inscricao, dados.fantasia))
 
-    console.log(data)
-
     if (data) {
         return res.json({
             status: 200,
@@ -114,9 +111,51 @@ const cadastroFornecedor = async (req, res) => {
 
 }
 
+const cadastroCategoriaInsumo = async (req, res) => {
+
+    const dados = req.body;
+
+    ({ error, data } = await VerificarCategoria(dados.nome));
+
+    if (data) {
+        return res.json({
+            status: 501,
+            message: "Categoria já está cadastrada!"
+        })
+    }
+
+    if (error) {
+        return res.json({
+            status: 502,
+            message: "Falha ao cadastrar a nova categoria!"
+        })
+    }
+
+    ({ error, data } = await CadastroCategoriaInsumo(dados))
+
+    if (data) {
+        return res.json({
+            status: 200,
+            message: "Categoria cadastrada com sucesso!",
+            categoria: {
+                id_categoria_insumo: data.id_categoria_insumo,
+                nome: data.nome
+            }
+        })
+    } else {
+        return res.json({
+            status: 503,
+            message: "Falha ao cadastrar a nova categoria!"
+        })
+    }
+
+}
 
 
 
 
-
-module.exports = { cadastroPessoa, cadastroFornecedor }
+module.exports = {
+    cadastroPessoa,
+    cadastroFornecedor,
+    cadastroCategoriaInsumo
+}

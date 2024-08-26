@@ -1,18 +1,18 @@
-const { BuscarFornecedores, BuscarAreas } = require("../consultas/query_buscar_dados")
+const { buscas } = require("../consultas/data")
+const { BuscarModelos } = require("../consultas/query_buscar_dados")
 const { BuscarPermissoes } = require("../consultas/QueryLogin")
 
 const DadosIniciais = async (id_usuario) => {
-    
+
     let response = null
     let dados = {
         permissoes: []
     }
-    
-    //Fornecedores
-    response = await BuscarFornecedores()
-    dados.fornecedores = response.error ? [] : response.data
 
-    //Permissões
+    for (const busca of buscas) {
+        response = await BuscarModelos(busca.model, busca.exclude)
+        dados[busca.key] = response.error ? [] : response.data
+    }
 
     response = await BuscarPermissoes(id_usuario)
 
@@ -21,12 +21,6 @@ const DadosIniciais = async (id_usuario) => {
             dados.permissoes.push(permissao.nome)
         })
     }
-
-    //Áreas
-
-    response = await BuscarAreas()
-    dados.areas = response.error ? [] : response.data
-
     return dados
 }
 
