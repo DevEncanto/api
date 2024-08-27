@@ -1,4 +1,9 @@
 (async () => {
+
+    const tabelas = [
+        'insumos'
+    ]
+
     const db = require('./src/configuracoes/banco_dados')
     const Pessoa = require("./src/modelos/mysql/Pessoas")
     const Usuario = require("./src/modelos/mysql/Usuarios")
@@ -10,6 +15,15 @@
     const PontosMapa = require("./src/modelos/mysql/PontosMapa")
     const Categoria_Insumo = require("./src/modelos/mysql/Categoria_Insumos")
     const Insumos = require("./src/modelos/mysql/Insumos")
-    
+    const Tipo_Estoque = require("./src/modelos/mysql/Tipo_Estoque")
+    const Estoque = require("./src/modelos/mysql/Estoque")
+    const Itens = require("./src/modelos/mysql/Itens")
+
     await db.sync({ force: true })
+
+    for (const tabela of tabelas) {
+        await Tipo_Estoque.create({
+            nome: tabela
+        })
+    }
 })();

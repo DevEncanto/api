@@ -5,6 +5,7 @@ const { BuscarPermissoes } = require("../consultas/QueryLogin")
 const DadosIniciais = async (id_usuario) => {
 
     let response = null
+    let auxiliar = []
     let dados = {
         permissoes: []
     }
@@ -21,6 +22,12 @@ const DadosIniciais = async (id_usuario) => {
             dados.permissoes.push(permissao.nome)
         })
     }
+    dados.tipos_estoques.forEach((tipo) => {
+        auxiliar.push(tipo.nome)
+    })
+    dados.tipos_estoques = auxiliar
+
+
     return dados
 }
 
