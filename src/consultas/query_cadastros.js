@@ -11,6 +11,7 @@ const Insumos = require("../modelos/mysql/Insumos")
 //Importação da função que trata eventuais erros durante as operações
 const TryCatch = require("../utilidades/try")
 const Lotes = require("../modelos/mysql/Lotes")
+const Estoque = require("../modelos/mysql/Estoque")
 
 //Objeto de consultas
 
@@ -39,6 +40,12 @@ const VerificarInsumo = async (nome) => {
         nome: nome
       }
     })
+  })
+}
+
+const CadastroEstoque = async (estoque) => {
+  return TryCatch(async () => {
+    return await Estoque.create(estoque)
   })
 }
 
@@ -86,5 +93,6 @@ module.exports = {
   CadastroInsumo,
   VerificarCategoria,
   VerificarInsumo,
-  CadastroLote
+  CadastroLote,
+  CadastroEstoque
 }

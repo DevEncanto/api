@@ -7,7 +7,7 @@ const database = require("../../configuracoes/banco_dados")
 //Definição do Model Usuários
 
 const Estoque = database.define('estoques', {
-    id_tipo_estoque: {
+    id_estoque: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,

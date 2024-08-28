@@ -14,8 +14,14 @@ const Lotes = database.define('lotes', {
     primaryKey: true
   },
   nome: Sequelize.STRING(20),
-  hectares: Sequelize.DOUBLE,
-  hectares_plant: Sequelize.DOUBLE,
+  hectares: {
+    type: Sequelize.DOUBLE,
+    defaultValue: 0
+  },
+  hectares_plant: {
+    type: Sequelize.DOUBLE,
+    defaultValue: 0
+  },
 })
 
 module.exports = Lotes

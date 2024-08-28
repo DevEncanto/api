@@ -21,7 +21,8 @@ const ListarPermissoes = `SELECT p.nome FROM permissoes_usuarios as pu
     inner join usuarios as u on u.id_usuario = pu.id_usuario
 where u.id_usuario = `
 
+const ListarEstoques = `select e.id_estoque as id_estoque, e.nome as nome, l.nome as lote from estoques as e inner join lotes as l on l.id_lote = e.id_lote;`
 
 
 
-module.exports = { QueryFluxoCaixa, QueryMediaBaixa, QuerySaldoUsuarios,ListarPermissoes}
+module.exports = { ListarEstoques, QueryFluxoCaixa, QueryMediaBaixa, QuerySaldoUsuarios, ListarPermissoes }

@@ -5,7 +5,7 @@ const database = require("../configuracoes/banco_dados")
 //Importação da model Usuários
 const Usuarios = require("../modelos/mysql/Usuarios")
 const TryCatch = require('../utilidades/try')
-const { ListarPermissoes } = require('./QuerySQL')
+const { ListarPermissoes, ListarEstoques } = require('./QuerySQL')
 
 //Objeto de consultas
 const QueryLogin = {
@@ -46,6 +46,13 @@ const BuscarPermissoes = async (id_usuario) => {
     })
 }
 
-module.exports = { BuscarUsuario, BuscarPermissoes }
+const BuscarEstoques = async (id_usuario) => {
+    return TryCatch(async () => {
+        const [result] = await database.query(ListarEstoques)
+        return result
+    })
+}
+
+module.exports = { BuscarUsuario, BuscarPermissoes, BuscarEstoques }
 
 

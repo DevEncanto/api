@@ -1,13 +1,14 @@
 const { buscas } = require("../consultas/data")
 const { BuscarModelos } = require("../consultas/query_buscar_dados")
-const { BuscarPermissoes } = require("../consultas/QueryLogin")
+const { BuscarPermissoes, BuscarEstoques } = require("../consultas/QueryLogin")
 
 const DadosIniciais = async (id_usuario) => {
 
     let response = null
     let auxiliar = []
     let dados = {
-        permissoes: []
+        permissoes: [],
+        estoques: []
     }
 
     for (const busca of buscas) {
@@ -22,6 +23,11 @@ const DadosIniciais = async (id_usuario) => {
             dados.permissoes.push(permissao.nome)
         })
     }
+
+    response = await BuscarEstoques()
+
+    dados.estoques = response.data ? response.data : []
+
     dados.tipos_estoques.forEach((tipo) => {
         auxiliar.push(tipo.nome)
     })

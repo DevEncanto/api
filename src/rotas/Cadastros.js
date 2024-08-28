@@ -14,6 +14,8 @@ router.post('/novo_usuario', auth.cadastroUsuario)
 router.post('/nova_pessoa', cadastro.cadastroPessoa)
 router.post('/novo_insumo', cadastro.cadastroInsumo)
 router.post('/novo_fornecedor', cadastro.cadastroFornecedor)
+router.post('/novo_estoque', cadastro.cadastroEstoque)
+router.post('/novo_lote', cadastro.cadastroLote)
 router.post('/nova_categoria_insumo', cadastro.cadastroCategoriaInsumo)
 
 //Exportação das Rotas

@@ -1,6 +1,7 @@
 //Importação da conexão com o banco de dados.
 
 const database = require("../configuracoes/banco_dados")
+const Estoque = require("../modelos/mysql/Estoque")
 const Lotes = require("../modelos/mysql/Lotes")
 
 //Importação da model Usuários
@@ -46,6 +47,16 @@ const VerificarUsuario = async (usuario) => {
 const VerificarLote = async (nome) => {
     return TryCatch(async () => {
         return await Lotes.findOne({
+            where: {
+                nome: nome
+            }
+        })
+    })
+}
+
+const VerificarEstoque = async (nome) => {
+    return TryCatch(async () => {
+        return await Estoque.findOne({
             where: {
                 nome: nome
             }
@@ -103,5 +114,6 @@ module.exports = {
     VerificadorCodigoNumerico,
     AtualizarStatusConta,
     AtualizarSenha,
-    VerificarLote
+    VerificarLote,
+    VerificarEstoque
 }

@@ -28,11 +28,6 @@ const buscas = [
     key: "categorias_insumos"
   },
   {
-    model: Estoque,
-    exclude: [],
-    key: "estoques"
-  },
-  {
     model: Tipo_Estoque,
     exclude: [],
     key: "tipos_estoques"
