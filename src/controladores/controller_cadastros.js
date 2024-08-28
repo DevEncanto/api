@@ -1,4 +1,5 @@
-const { VerificarPessoa, CadastroPessoa, CadastroFornecedor, CadastroCategoriaInsumo, VerificarCategoria, VerificarInsumo, CadastroInsumo } = require("../consultas/query_cadastros")
+const { VerificarLote } = require("../consultas/query_cadastro");
+const { VerificarPessoa, CadastroPessoa, CadastroFornecedor, CadastroCategoriaInsumo, VerificarCategoria, VerificarInsumo, CadastroInsumo, CadastroLote } = require("../consultas/query_cadastros")
 
 const cadastroPessoa = async (req, res) => {
 
@@ -197,12 +198,49 @@ const cadastroCategoriaInsumo = async (req, res) => {
 
 }
 
+const cadastroLote = async (req, res) => {
+    const dados = req.body;
 
+    ({ error, data } = await VerificarLote(dados.nome));
+
+    if (data) {
+        return res.json({
+            status: 501,
+            message: "O lote já está cadastrada!"
+        })
+    }
+
+    if (error) {
+        return res.json({
+            status: 502,
+            message: "Falha ao cadastrar o novo lote!"
+        })
+    }
+
+    ({ error, data } = await CadastroLote(dados));
+
+    if (data) {
+        return res.json({
+            status: 200,
+            message: "Lote cadastrado com sucesso!",
+            categoria: {
+                id_lote: data.id_lote,
+                nome: data.nome
+            }
+        })
+    } else {
+        return res.json({
+            status: 503,
+            message: "Falha ao cadastrar o novo lote!"
+        })
+    }
+}
 
 
 module.exports = {
     cadastroPessoa,
     cadastroFornecedor,
     cadastroCategoriaInsumo,
-    cadastroInsumo
+    cadastroInsumo,
+    cadastroLote
 }

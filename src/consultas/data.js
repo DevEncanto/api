@@ -4,6 +4,7 @@ const Estoque = require("../modelos/mysql/Estoque");
 const Fornecedor = require("../modelos/mysql/Fornecedores");
 const Insumos = require("../modelos/mysql/Insumos");
 const Tipo_Estoque = require("../modelos/mysql/Tipo_Estoque");
+const Lotes = require("../modelos/mysql/Lotes")
 
 const buscas = [
   {
@@ -35,6 +36,11 @@ const buscas = [
     model: Tipo_Estoque,
     exclude: [],
     key: "tipos_estoques"
+  },
+  {
+    model: Lotes,
+    exclude: [],
+    key: "lotes"
   }
 ]
 
