@@ -18,6 +18,8 @@
     const Tipo_Estoque = require("./src/modelos/mysql/Tipo_Estoque")
     const Estoque = require("./src/modelos/mysql/Estoque")
     const Itens = require("./src/modelos/mysql/Itens")
+    const SaidaEstoque = require("./src/modelos/mysql/Saida_Estoque")
+    const Entrada_Estoque = require("./src/modelos/mysql/Entrada_Estoque")
 
     await db.sync({ force: true })
 

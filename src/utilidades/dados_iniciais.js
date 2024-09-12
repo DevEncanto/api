@@ -9,7 +9,7 @@ const DadosIniciais = async (id_usuario) => {
     let dados = {
         permissoes: [],
         estoques: []
-    }
+    }   
 
     for (const busca of buscas) {
         response = await BuscarModelos(busca.model, busca.exclude)
