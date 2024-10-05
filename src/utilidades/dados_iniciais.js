@@ -1,6 +1,6 @@
 const { buscas } = require("../consultas/data")
 const { BuscarModelos } = require("../consultas/query_buscar_dados")
-const { BuscarPermissoes, BuscarEstoques } = require("../consultas/QueryLogin")
+const { BuscarPermissoes, BuscarEstoques, BuscarItensEstoqueInsumos, BuscarEntradasEstoqueInsumos } = require("../consultas/QueryLogin")
 
 const DadosIniciais = async (id_usuario) => {
 
@@ -8,8 +8,10 @@ const DadosIniciais = async (id_usuario) => {
     let auxiliar = []
     let dados = {
         permissoes: [],
-        estoques: []
-    }   
+        estoques: [],
+        estoque_insumos: [],
+        entradas_insumos: []
+    }
 
     for (const busca of buscas) {
         response = await BuscarModelos(busca.model, busca.exclude)
@@ -24,15 +26,32 @@ const DadosIniciais = async (id_usuario) => {
         })
     }
 
+    response = await BuscarItensEstoqueInsumos()
+
+    dados.estoque_insumos = response.data ? response.data : []
+
     response = await BuscarEstoques()
 
     dados.estoques = response.data ? response.data : []
+
 
     dados.tipos_estoques.forEach((tipo) => {
         auxiliar.push(tipo.nome)
     })
     dados.tipos_estoques = auxiliar
+    auxiliar = []
+    dados.tipos_movimentacoes.forEach((tipo) => {
+        auxiliar.push(tipo.nome)
+    })
+    dados.tipos_movimentacoes = auxiliar
+    auxiliar = []
 
+    response = await BuscarEntradasEstoqueInsumos()
+    dados.entradas_insumos = response.data ? response.data : []
+
+    dados.entradas_insumos.forEach((entrada, index) => {
+        entrada.id_item = index + 1
+    })
 
     return dados
 }

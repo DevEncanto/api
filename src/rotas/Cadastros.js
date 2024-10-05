@@ -17,6 +17,7 @@ router.post('/novo_fornecedor', cadastro.cadastroFornecedor)
 router.post('/novo_estoque', cadastro.cadastroEstoque)
 router.post('/novo_lote', cadastro.cadastroLote)
 router.post('/nova_categoria_insumo', cadastro.cadastroCategoriaInsumo)
+router.post('/entrada_estoque', cadastro.entradaEstoque)
 
 //Exportação das Rotas
 module.exports = router

@@ -6,6 +6,8 @@ const database = require("../../configuracoes/banco_dados")
 const Estoque = require("./Estoque")
 const Item = require("./Itens")
 const Area = require("./Areas")
+const Tipo_Saida = require("./Tipos_Saida")
+
 //Definição do Model Usuários
 
 const SaidaEstoque = database.define('saidas_estoques', {
@@ -17,8 +19,10 @@ const SaidaEstoque = database.define('saidas_estoques', {
     },
     id_item: Sequelize.INTEGER,
     id_estoque: Sequelize.INTEGER,
-    qtde: Sequelize.DOUBLE
-
+    qtde: Sequelize.DOUBLE,
+    id_area: Sequelize.INTEGER,
+    id_etiqueta: Sequelize.INTEGER,
+    id_tipo_saida: Sequelize.INTEGER
 })
 
 SaidaEstoque.belongsTo(Estoque, {
@@ -35,5 +39,9 @@ SaidaEstoque.belongsTo(Area, {
     foreignKey: "id_area"
 })
 
+SaidaEstoque.belongsTo(Tipo_Saida, {
+    constraint: true,
+    foreignKey: "id_tipo_saida"
+})
 
 module.exports = SaidaEstoque

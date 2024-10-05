@@ -5,6 +5,9 @@ const Sequelize = require("sequelize")
 const database = require("../../configuracoes/banco_dados")
 const Estoque = require("../mysql/Estoque")
 const Item = require("../mysql/Itens")
+const Fornecedor = require("./Fornecedores")
+const Etiqueta = require("./Etiquetas")
+const Compras = require("./Compras")
 
 //Definição do Model Usuários
 
@@ -15,10 +18,19 @@ const EntradaEstoque = database.define('entradas_estoques', {
         allowNull: false,
         primaryKey: true
     },
+    data_entrada: Sequelize.STRING(20),
     id_item: Sequelize.INTEGER,
     id_estoque: Sequelize.INTEGER,
-    qtde: Sequelize.DOUBLE
-
+    id_compra: Sequelize.INTEGER,
+    qtde: Sequelize.DOUBLE,
+    valor_unitario: Sequelize.DOUBLE,
+    descontos: Sequelize.DOUBLE,
+    id_fornecedor: Sequelize.INTEGER,
+    id_etiqueta: Sequelize.INTEGER,
+    tipo_entrada: {
+        type: Sequelize.STRING(40),
+        defaultValue: "compra"
+    }
 })
 
 EntradaEstoque.belongsTo(Estoque, {
@@ -31,6 +43,19 @@ EntradaEstoque.belongsTo(Item, {
     foreignKey: "id_item"
 })
 
+EntradaEstoque.belongsTo(Fornecedor, {
+    constraint: true,
+    foreignKey: "id_fornecedor"
+})
 
+EntradaEstoque.belongsTo(Etiqueta, {
+    constraint: true,
+    foreignKey: "id_etiqueta"
+})
+
+EntradaEstoque.belongsTo(Compras, {
+    constraint: true,
+    foreignKey: "id_compra"
+})
 
 module.exports = EntradaEstoque
